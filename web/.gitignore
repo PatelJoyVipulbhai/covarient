@@ -1,0 +1,22 @@
+# Dependency directories
+node_modules/
+Covarient/node_modules/
+web/node_modules/
+
+# Build and temp directories
+.expo/
+Covarient/.expo/
+dist/
+Covarient/dist/
+web/dist/
+
+# Local configuration files
+.env
+.env.local
+.env.*.local
+
+# IDE and tool files
+.vscode/
+.claude/
+.gemini/
+*.log
