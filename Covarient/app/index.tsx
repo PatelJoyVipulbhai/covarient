@@ -76,6 +76,8 @@ function Github({ color, size }: { color?: string; size?: number }) {
 }
 
 import { useForm, Controller } from 'react-hook-form';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
 
 function Logo({ size = 24 }: { size?: number }) {
   return (
@@ -690,19 +692,23 @@ export default function Index() {
       name: '',
       email: '',
       project: '',
-      budget: 'Under $5k'
+      budget: ''
     }
   });
 
   const onSubmit = async (data: any) => {
     setSendingForm(true);
     try {
-      if (Platform.OS === 'web') {
-        const emailjs = await import('@emailjs/browser');
-        // If developer has credentials, they can replace these.
-        // We will simulate sending to show the UX transitions.
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Save form submission data directly to Firestore (all platforms)
+      await addDoc(collection(db, "contact"), {
+        name: data.name,
+        email: data.email,
+        project: data.project,
+        budget: data.budget,
+        createdAt: serverTimestamp()
+      });
 
+      if (Platform.OS === 'web') {
         // Success: Confetti burst
         const confetti = (await import('canvas-confetti')).default;
         confetti({
@@ -712,12 +718,13 @@ export default function Index() {
           origin: { y: 0.6 }
         });
       } else {
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
       setFormSubmitted(true);
       reset();
     } catch (err) {
       console.error(err);
+      alert("Failed to submit project specs. Please try again.");
     } finally {
       setSendingForm(false);
     }
@@ -726,7 +733,11 @@ export default function Index() {
   const handleScrollToSection = (sectionId: string) => {
     setMobileMenuOpen(false);
     if (typeof document !== 'undefined') {
-      const element = document.getElementById(sectionId);
+      let targetId = sectionId;
+      if (sectionId === 'technology') targetId = 'tech';
+      if (sectionId === 'review') targetId = 'testimonials';
+      
+      const element = document.getElementById(targetId);
       if (element) {
         // If lenis is active, scroll using lenis
         const globalLenis = (window as any).lenis;
@@ -876,7 +887,7 @@ export default function Index() {
 
         {/* Desktop nav links */}
         <View className="hidden lg:flex flex-row items-center gap-8">
-          {['Home', 'Services', 'Process', 'About', 'Contact'].map((section) => (
+          {['Home', 'About', 'Services', 'Process', 'Technology', 'Review', 'Contact'].map((section) => (
             <Pressable
               key={section}
               onPress={() => handleScrollToSection(section.toLowerCase())}
@@ -918,7 +929,7 @@ export default function Index() {
       {mobileMenuOpen && (
         <View className="fixed inset-0 bg-black z-[998] pt-24 px-8 justify-start">
           <View className="flex-col gap-6 items-start">
-            {['Home', 'Services', 'Process', 'About', 'Contact'].map((section) => (
+            {['Home', 'About', 'Services', 'Process', 'Technology', 'Review', 'Contact'].map((section) => (
               <Pressable
                 key={section}
                 onPress={() => handleScrollToSection(section.toLowerCase())}
@@ -1193,6 +1204,155 @@ export default function Index() {
                   </div>
                 );
               })}
+            </div>
+          </div>
+        </div>
+
+        {/* SECTION 7: THE MINDS BEHIND COVARIENT */}
+        <div
+          id="minds"
+          className="relative px-6 lg:px-16 py-32 bg-[#080808] border-b border-white/5 overflow-hidden"
+        >
+          {/* Faint ambient glow behind the section */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-lime/5 blur-[120px] rounded-full pointer-events-none" />
+
+          <div className="relative max-w-7xl mx-auto">
+            {/* Section Header for Mobile (Hidden on Desktop) */}
+            <div className="lg:hidden mb-16 text-center">
+              <p className="text-lime text-xs tracking-[0.25em] uppercase mb-4 font-mono">
+                THE MINDS BEHIND COVARIENT
+              </p>
+              <h2 className="text-white text-4xl font-bold leading-tight font-space mb-4">
+                Two Minds.<br />One Digital Standard.
+              </h2>
+              <p className="text-customMuted text-sm font-sans leading-relaxed max-w-md mx-auto">
+                Veer builds the system. Nyra shapes the experience. Together, they represent how Covarient creates modern websites for serious brands.
+              </p>
+            </div>
+
+            {/* Main Interactive Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+
+              {/* Left Column: VEER Card */}
+              <div className="lg:col-span-4 flex flex-col items-center lg:items-end">
+                <div className="w-full max-w-[360px] bg-card border border-white/5 hover:border-lime/30 rounded-2xl overflow-hidden p-6 transition-all duration-500 hover:scale-[1.02] shadow-[0_0_30px_rgba(0,0,0,0.5)] group relative">
+                  {/* Glowing border effect */}
+                  <div className="absolute inset-0 border border-lime/0 group-hover:border-lime/20 rounded-2xl transition-colors duration-500" />
+
+                  {/* Portrait Image Container */}
+                  <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-6 bg-black border border-white/10">
+                    <Image
+                      source={require('../assets/images/veer.png')}
+                      style={{ width: '100%', height: '100%', borderRadius: 12 }}
+                      resizeMode="cover"
+                      className=" group-hover:grayscale-0 transition-all duration-700 ease-out scale-100 group-hover:scale-105"
+                    />
+                    {/* Corner accents */}
+                    <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-lime/65 opacity-60" />
+                    <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-lime/65 opacity-60" />
+                  </div>
+
+                  {/* Character Info */}
+                  <div className="text-center">
+                    <h3 className="text-lime text-2xl lg:text-3xl font-space font-bold tracking-wide uppercase mb-1">
+                      VEER
+                    </h3>
+                    <p className="text-white/60 text-xs font-mono tracking-widest uppercase mb-5">
+                      THE SYSTEM ARCHITECT
+                    </p>
+
+                    {/* Strengths Pills */}
+                    <div className="flex flex-row items-center justify-center gap-2 mb-6">
+                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">STRATEGY</span>
+                      <span className="text-white/20 text-xs font-mono">|</span>
+                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">DEVELOPMENT</span>
+                      <span className="text-white/20 text-xs font-mono">|</span>
+                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">EXECUTION</span>
+                    </div>
+
+                    <p className="text-customMuted text-sm leading-relaxed font-sans min-h-[72px]">
+                      Veer represents the logic behind every Covarient project — structure, speed, performance, and scalable systems.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Center Column: Desktop Header and Connections (Hidden on Mobile) */}
+              <div className="hidden lg:col-span-4 lg:flex flex-col items-center justify-center text-center px-4 relative">
+                {/* Horizontal connection lines and middle monogram */}
+                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-between pointer-events-none px-4 z-0">
+                  <div className="h-[1px] flex-1 bg-gradient-to-r from-lime/20 to-lime/40" />
+                  <div className="w-10 h-10 rounded-full bg-black border border-lime/30 flex items-center justify-center shadow-[0_0_15px_rgba(142,224,0,0.2)] mx-4">
+                    {/* Small monogram icon */}
+                    <span className="text-lime font-space font-bold text-sm">C</span>
+                  </div>
+                  <div className="h-[1px] flex-1 bg-gradient-to-r from-lime/40 to-lime/20" />
+                </div>
+
+                <div className="z-10 bg-[#080808]/90 py-8 px-4 rounded-xl border border-white/5 backdrop-blur-sm">
+                  <p className="text-lime text-xs tracking-[0.25em] uppercase mb-4 font-mono">
+                    THE MINDS BEHIND COVARIENT
+                  </p>
+                  <h2 className="text-white text-5xl font-bold leading-tight font-space mb-6 tracking-tight">
+                    Two Minds.<br />One Digital Standard.
+                  </h2>
+                  <p className="text-customMuted text-[14px] leading-relaxed font-sans max-w-xs mx-auto">
+                    Veer builds the system. Nyra shapes the experience. Together, they represent how Covarient creates modern websites for serious brands.
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Column: NYRA Card */}
+              <div className="lg:col-span-4 flex flex-col items-center lg:items-start">
+                <div className="w-full max-w-[360px] bg-card border border-white/5 hover:border-lime/30 rounded-2xl overflow-hidden p-6 transition-all duration-500 hover:scale-[1.02] shadow-[0_0_30px_rgba(0,0,0,0.5)] group relative">
+                  {/* Glowing border effect */}
+                  <div className="absolute inset-0 border border-lime/0 group-hover:border-lime/20 rounded-2xl transition-colors duration-500" />
+
+                  {/* Portrait Image Container */}
+                  <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-6 bg-black border border-white/10">
+                    <Image
+                      source={require('../assets/images/nyra.png')}
+                      style={{ width: '100%', height: '100%', borderRadius: 12 }}
+                      resizeMode="cover"
+                      className="group-hover:grayscale-0 transition-all duration-700 ease-out scale-100 group-hover:scale-105"
+                    />
+                    {/* Corner accents */}
+                    <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-lime/65 opacity-60" />
+                    <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-lime/65 opacity-60" />
+                  </div>
+
+                  {/* Character Info */}
+                  <div className="text-center">
+                    <h3 className="text-lime text-2xl lg:text-3xl font-space font-bold tracking-wide uppercase mb-1">
+                      NYRA
+                    </h3>
+                    <p className="text-white/60 text-xs font-mono tracking-widest uppercase mb-5">
+                      THE BRAND INTELLIGENCE
+                    </p>
+
+                    {/* Strengths Pills */}
+                    <div className="flex flex-row items-center justify-center gap-2 mb-6">
+                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">DESIGN</span>
+                      <span className="text-white/20 text-xs font-mono">|</span>
+                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">STORYTELLING</span>
+                      <span className="text-white/20 text-xs font-mono">|</span>
+                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">EXPERIENCE</span>
+                    </div>
+
+                    <p className="text-customMuted text-sm leading-relaxed font-sans min-h-[72px]">
+                      Nyra represents the emotional side of every project — trust, identity, visual clarity, and user experience.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Disclaimer */}
+            <div className="mt-16 text-center border-t border-white/5 pt-8">
+              <p className="text-[10px] font-mono tracking-widest text-customMuted/60 uppercase">
+                * Disclaimer: Veer and Nyra are brand characters representing the core pillars of Covarient, not real human beings.
+              </p>
             </div>
           </div>
         </div>
@@ -1599,7 +1759,7 @@ export default function Index() {
                           onChange={onChange}
                           value={value}
                           className="bg-transparent border-b border-white/10 focus:border-[#8EE000] pb-3 pt-1 text-white font-sans text-lg outline-none transition-colors"
-                          placeholder="Sarah Connor"
+                          placeholder=""
                         />
                       )}
                     />
@@ -1608,26 +1768,27 @@ export default function Index() {
                     )}
                   </div>
 
-                  {/* Email */}
+                  {/* Email / Mobile */}
                   <div className="flex flex-col gap-2 relative">
-                    <label className="text-white/40 font-mono text-[10px] uppercase tracking-widest">Email Address</label>
+                    <label className="text-white/40 font-mono text-[10px] uppercase tracking-widest">Email / Mobile Number</label>
                     <Controller
                       control={control}
                       rules={{
-                        required: 'Email is required',
-                        pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: 'Invalid email address'
+                        required: 'Email or Mobile Number is required',
+                        validate: (value) => {
+                          const isEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value);
+                          const isPhone = /^\+?[0-9\s\-()]{7,15}$/.test(value);
+                          return isEmail || isPhone || 'Invalid email or mobile number';
                         }
                       }}
                       name="email"
                       render={({ field: { onChange, value } }) => (
                         <input
-                          type="email"
+                          type="text"
                           onChange={onChange}
                           value={value}
                           className="bg-transparent border-b border-white/10 focus:border-[#8EE000] pb-3 pt-1 text-white font-sans text-lg outline-none transition-colors"
-                          placeholder="sarah@skynet.com"
+                          placeholder=""
                         />
                       )}
                     />
@@ -1649,7 +1810,7 @@ export default function Index() {
                           onChange={onChange}
                           value={value}
                           className="bg-transparent border-b border-white/10 focus:border-[#8EE000] pb-3 pt-1 text-white font-sans text-lg outline-none transition-colors resize-none"
-                          placeholder="Describe your vision, timeline, or key technical specifications..."
+                          placeholder=""
                         />
                       )}
                     />
@@ -1658,30 +1819,26 @@ export default function Index() {
                     )}
                   </div>
 
-                  {/* Estimated Budget Selector */}
-                  <div className="flex flex-col gap-3">
+                  {/* Estimated Budget Input */}
+                  <div className="flex flex-col gap-2 relative">
                     <label className="text-white/40 font-mono text-[10px] uppercase tracking-widest">Estimated Budget</label>
                     <Controller
                       control={control}
+                      rules={{ required: 'Estimated budget is required' }}
                       name="budget"
                       render={({ field: { onChange, value } }) => (
-                        <div className="flex flex-wrap gap-3 mt-2">
-                          {['Under $5k', '$5k–15k', '$15k–50k', '$50k+'].map((budget) => (
-                            <button
-                              type="button"
-                              key={budget}
-                              onClick={() => onChange(budget)}
-                              className={`px-5 py-3 border text-xs font-space font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${value === budget
-                                ? 'bg-[#8EE000] text-black border-[#8EE000]'
-                                : 'border-white/10 text-white hover:border-[#8EE000]'
-                                }`}
-                            >
-                              {budget}
-                            </button>
-                          ))}
-                        </div>
+                        <input
+                          type="text"
+                          onChange={onChange}
+                          value={value}
+                          className="bg-transparent border-b border-white/10 focus:border-[#8EE000] pb-3 pt-1 text-white font-sans text-lg outline-none transition-colors"
+                          placeholder=""
+                        />
                       )}
                     />
+                    {errors.budget && (
+                      <span className="text-red-500 font-mono text-xs mt-1 absolute bottom-[-20px]">{errors.budget.message}</span>
+                    )}
                   </div>
 
                   {/* Submit Button */}
