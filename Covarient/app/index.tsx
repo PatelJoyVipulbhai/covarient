@@ -126,7 +126,7 @@ function ThreeCanvas() {
       containerRef.current?.appendChild(renderer.domElement);
 
       // Node count and properties
-      const nodeCount = 75;
+      const nodeCount = 100;
       const positions = new Float32Array(nodeCount * 3);
       const velocities = new Float32Array(nodeCount * 3);
       const nodeColors = new Float32Array(nodeCount * 3);
@@ -363,11 +363,16 @@ function ThreeCanvas() {
       };
       window.addEventListener('resize', handleResize);
 
+      const container = containerRef.current;
+
       // Cleanups
       return () => {
         window.removeEventListener('mousemove', handleMouseMove);
         window.removeEventListener('resize', handleResize);
         cancelAnimationFrame(animationFrameId);
+        if (container && renderer.domElement && container.contains(renderer.domElement)) {
+          container.removeChild(renderer.domElement);
+        }
         renderer.dispose();
       };
     };
@@ -390,7 +395,7 @@ function ThreeCanvas() {
     );
   }
 
-  return <div ref={containerRef} className="w-full h-[450px] lg:h-[600px] select-none" />;
+  return <div ref={containerRef} className="w-full h-full select-none" />;
 }
 
 
@@ -736,7 +741,8 @@ export default function Index() {
       let targetId = sectionId;
       if (sectionId === 'technology') targetId = 'tech';
       if (sectionId === 'review') targetId = 'testimonials';
-      
+      if (sectionId === 'why us') targetId = 'why';
+
       const element = document.getElementById(targetId);
       if (element) {
         // If lenis is active, scroll using lenis
@@ -887,7 +893,7 @@ export default function Index() {
 
         {/* Desktop nav links */}
         <View className="hidden lg:flex flex-row items-center gap-8">
-          {['Home', 'About', 'Services', 'Process', 'Technology', 'Review', 'Contact'].map((section) => (
+          {['Home', 'Why Us', 'About', 'Services', 'Process', 'Technology', 'Pricing', 'Review', 'Contact'].map((section) => (
             <Pressable
               key={section}
               onPress={() => handleScrollToSection(section.toLowerCase())}
@@ -929,7 +935,7 @@ export default function Index() {
       {mobileMenuOpen && (
         <View className="fixed inset-0 bg-black z-[998] pt-24 px-8 justify-start">
           <View className="flex-col gap-6 items-start">
-            {['Home', 'About', 'Services', 'Process', 'Technology', 'Review', 'Contact'].map((section) => (
+            {['Home', 'About', 'Why Us', 'Services', 'Process', 'Technology', 'Pricing', 'Review', 'Contact'].map((section) => (
               <Pressable
                 key={section}
                 onPress={() => handleScrollToSection(section.toLowerCase())}
@@ -969,23 +975,23 @@ export default function Index() {
 
               {/* H1 Slide-in lines */}
               <View className="overflow-hidden mb-1">
-                <h1 className="hero-h1-line text-white font-space font-bold text-5xl lg:text-[96px] leading-[0.95] tracking-tight">
-                  We Build
+                <h1 className="hero-h1-line text-white font-space font-bold text-4xl lg:text-[76px] leading-[0.95] tracking-tight">
+                  We Build Websites
                 </h1>
               </View>
               <View className="overflow-hidden mb-1">
-                <h1 className="hero-h1-line text-white font-space font-bold text-5xl lg:text-[96px] leading-[0.95] tracking-tight">
-                  Digital Products
+                <h1 className="hero-h1-line text-white font-space font-bold text-4xl lg:text-[76px] leading-[0.95] tracking-tight">
+                  That Make Brands
                 </h1>
               </View>
               <View className="overflow-hidden mb-6">
-                <h1 className="hero-h1-line text-white font-space font-bold text-5xl lg:text-[96px] leading-[0.95] tracking-tight">
-                  That <span className="text-[#8EE000]">Dominate.</span>
+                <h1 className="hero-h1-line text-white font-space font-bold text-4xl lg:text-[76px] leading-[0.95] tracking-tight">
+                  Look <span className="text-[#8EE000]">Expensive.</span>
                 </h1>
               </View>
 
-              <Text className="hero-fade-in text-customMuted font-sans text-lg lg:text-[20px] max-w-[500px] leading-relaxed mb-10">
-                Apps & Websites engineered for performance, crafted for impact.
+              <Text className="hero-fade-in text-customMuted font-sans text-lg lg:text-[20px] max-w-[650px] leading-relaxed mb-10">
+                Premium websites, apps, and digital systems for businesses that want trust, speed, and conversion.
               </Text>
 
               <View className="hero-fade-in flex-row gap-4 flex-wrap">
@@ -1071,6 +1077,199 @@ export default function Index() {
           </div>
         </View>
 
+        {/* SECTION (RELOCATED): MEET THE MINDS BEHIND COVARIENT */}
+        <div
+          id="minds"
+          className="relative px-6 lg:px-16 py-32 bg-[#080808] border-b border-white/5 overflow-hidden"
+        >
+          {/* Faint ambient glow behind the section */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-lime/5 blur-[120px] rounded-full pointer-events-none" />
+
+          <div className="relative max-w-7xl mx-auto">
+            {/* Section Header for Mobile (Hidden on Desktop) */}
+            <div className="lg:hidden mb-16 text-center">
+              <p className="text-lime text-xs tracking-[0.25em] uppercase mb-4 font-mono">
+                THE MINDS BEHIND COVARIENT
+              </p>
+              <h2 className="text-white text-4xl font-bold leading-tight font-space mb-4">
+                MEET THE MINDS BEHIND COVARIENT
+              </h2>
+              <p className="text-customMuted text-sm font-sans leading-relaxed max-w-md mx-auto">
+                Veer builds the system. Nyra shapes the experience. Together, they represent how Covarient creates modern websites for serious brands.
+              </p>
+            </div>
+
+            {/* Main Interactive Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+
+              {/* Left Column: VEER Card */}
+              <div className="lg:col-span-4 flex flex-col items-center lg:items-end">
+                <div className="w-full max-w-[360px] bg-card border border-white/5 hover:border-lime/30 rounded-2xl overflow-hidden p-6 transition-all duration-500 hover:scale-[1.02] shadow-[0_0_30px_rgba(0,0,0,0.5)] group relative">
+                  {/* Glowing border effect */}
+                  <div className="absolute inset-0 border border-lime/0 group-hover:border-lime/20 rounded-2xl transition-colors duration-500" />
+
+                  {/* Portrait Image Container */}
+                  <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-6 bg-black border border-white/10">
+                    <Image
+                      source={require('../assets/images/veer.png')}
+                      style={{ width: '100%', height: '100%', borderRadius: 12 }}
+                      resizeMode="cover"
+                      className=" group-hover:grayscale-0 transition-all duration-700 ease-out scale-100 group-hover:scale-105"
+                    />
+                    {/* Corner accents */}
+                    <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-lime/65 opacity-60" />
+                    <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-lime/65 opacity-60" />
+                  </div>
+
+                  {/* Character Info */}
+                  <div className="text-center">
+                    <h3 className="text-lime text-2xl lg:text-3xl font-space font-bold tracking-wide uppercase mb-1">
+                      VEER
+                    </h3>
+                    <p className="text-white/60 text-xs font-mono tracking-widest uppercase mb-5">
+                      THE SYSTEM ARCHITECT
+                    </p>
+
+                    {/* Strengths Pills */}
+                    <div className="flex flex-row items-center justify-center gap-2 mb-6">
+                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">STRATEGY</span>
+                      <span className="text-white/20 text-xs font-mono">|</span>
+                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">DEVELOPMENT</span>
+                      <span className="text-white/20 text-xs font-mono">|</span>
+                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">SYSTEMS</span>
+                    </div>
+
+                    <p className="text-customMuted text-sm leading-relaxed font-sans min-h-[72px]">
+                      Veer represents the logic behind every Covarient project — structure, speed, performance, and scalable systems.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Center Column: Desktop Header and Connections (Hidden on Mobile) */}
+              <div className="hidden lg:col-span-4 lg:flex flex-col items-center justify-center text-center px-4 relative">
+                {/* Horizontal connection lines and middle monogram */}
+                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-between pointer-events-none px-4 z-0">
+                  <div className="h-[1px] flex-1 bg-gradient-to-r from-lime/20 to-lime/40" />
+                  <div className="w-10 h-10 rounded-full bg-black border border-lime/30 flex items-center justify-center shadow-[0_0_15px_rgba(142,224,0,0.2)] mx-4">
+                    {/* Small monogram icon */}
+                    <span className="text-lime font-space font-bold text-sm">C</span>
+                  </div>
+                  <div className="h-[1px] flex-1 bg-gradient-to-r from-lime/40 to-lime/20" />
+                </div>
+
+                <div className="z-10 bg-[#080808]/90 py-8 px-4 rounded-xl border border-white/5 backdrop-blur-sm">
+                  <p className="text-lime text-xs tracking-[0.25em] uppercase mb-4 font-mono">
+                    THE MINDS BEHIND COVARIENT
+                  </p>
+                  <h2 className="text-white text-5xl font-bold leading-tight font-space mb-6 tracking-tight">
+                    MEET THE MINDS BEHIND COVARIENT
+                  </h2>
+                  <p className="text-customMuted text-[14px] leading-relaxed font-sans max-w-xs mx-auto">
+                    Veer builds the system. Nyra shapes the experience. Together, they represent how Covarient creates modern websites for serious brands.
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Column: NYRA Card */}
+              <div className="lg:col-span-4 flex flex-col items-center lg:items-start">
+                <div className="w-full max-w-[360px] bg-card border border-white/5 hover:border-lime/30 rounded-2xl overflow-hidden p-6 transition-all duration-500 hover:scale-[1.02] shadow-[0_0_30px_rgba(0,0,0,0.5)] group relative">
+                  {/* Glowing border effect */}
+                  <div className="absolute inset-0 border border-lime/0 group-hover:border-lime/20 rounded-2xl transition-colors duration-500" />
+
+                  {/* Portrait Image Container */}
+                  <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-6 bg-black border border-white/10">
+                    <Image
+                      source={require('../assets/images/nyra.png')}
+                      style={{ width: '100%', height: '100%', borderRadius: 12 }}
+                      resizeMode="cover"
+                      className="group-hover:grayscale-0 transition-all duration-700 ease-out scale-100 group-hover:scale-105"
+                    />
+                    {/* Corner accents */}
+                    <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-lime/65 opacity-60" />
+                    <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-lime/65 opacity-60" />
+                  </div>
+
+                  {/* Character Info */}
+                  <div className="text-center">
+                    <h3 className="text-lime text-2xl lg:text-3xl font-space font-bold tracking-wide uppercase mb-1">
+                      NYRA
+                    </h3>
+                    <p className="text-white/60 text-xs font-mono tracking-widest uppercase mb-5">
+                      THE BRAND INTELLIGENCE
+                    </p>
+
+                    {/* Strengths Pills */}
+                    <div className="flex flex-row items-center justify-center gap-2 mb-6">
+                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">BRANDING</span>
+                      <span className="text-white/20 text-xs font-mono">|</span>
+                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">STORY</span>
+                      <span className="text-white/20 text-xs font-mono">|</span>
+                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">DESIGN</span>
+                    </div>
+
+                    <p className="text-customMuted text-sm leading-relaxed font-sans min-h-[72px]">
+                      Nyra represents the emotional side of every project — trust, identity, visual clarity, and user experience.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Disclaimer */}
+            <div className="mt-16 text-center border-t border-white/5 pt-8">
+              <p className="text-[10px] font-mono tracking-widest text-customMuted/60 uppercase">
+                * Disclaimer: Veer and Nyra are brand characters representing the core pillars of Covarient, not real human beings.
+              </p>
+            </div>
+
+            {/* Alternating CTA after relocated minds section */}
+
+
+          </div>
+        </div>
+
+        {/* WHY COVARIENT SECTION */}
+        <div id="why" className="relative px-6 lg:px-16 py-32 bg-[#050505] border-b border-white/5 overflow-hidden">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+              <div className="lg:col-span-5">
+                <p className="text-[#8EE000] text-xs tracking-[0.25em] uppercase mb-4 font-mono font-semibold">
+                  WHY COVARIENT
+                </p>
+                <h2 className="text-white text-5xl lg:text-6xl font-bold font-space leading-tight mb-6">
+                  Not just design.<br />Not just development.
+                </h2>
+                <p className="text-zinc-400 font-sans text-base leading-relaxed max-w-md">
+                  We build premium digital systems engineered for high-growth businesses. We don't just build websites; we design cohesive brand experiences that command trust and drive conversions.
+                </p>
+              </div>
+              <div className="lg:col-span-7">
+                <div className="flex flex-col gap-6">
+                  {[
+                    { num: '01', title: 'Strategy', desc: 'Deep business understanding, conversion-focused user journeys, and robust project architecture.' },
+                    { num: '02', title: 'Premium Design', desc: 'Sophisticated aesthetics, dark mode by default, high-end typography, and tailored animations.' },
+                    { num: '03', title: 'Clean Development', desc: 'Optimized React/Next.js/Native codebases, rapid load times, zero bloat, and standard-setting execution.' },
+                    { num: '04', title: 'Conversion Thinking', desc: 'Strategic placement of call-to-actions, clear paths to value, and distraction-free layouts.' },
+                    { num: '05', title: 'Long-term Brand Systems', desc: 'Scalable design systems in Figma and clean components in code that grow with your company.' },
+                  ].map((item, i) => (
+                    <div key={i} className="flex flex-row gap-6 p-6 bg-[#0A0A0A] border border-white/5 hover:border-lime/30 rounded-lg transition-all duration-300">
+                      <span className="text-[#8EE000] font-space font-bold text-2xl">{item.num}</span>
+                      <div>
+                        <h4 className="text-white font-space font-bold text-lg mb-2">{item.title}</h4>
+                        <p className="text-zinc-400 font-sans text-sm leading-relaxed">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
         {/* SECTION 5: ABOUT / NUMBERS */}
         <View id="about" className="px-6 lg:px-16 py-[120px] bg-dark border-b border-white/5">
           <View className="max-w-[1280px] mx-auto flex-col lg:flex-row gap-16 lg:gap-24 items-center">
@@ -1129,6 +1328,8 @@ export default function Index() {
               ))}
             </View>
           </View>
+
+
         </View>
 
         {/* SECTION 6: SERVICES */}
@@ -1208,154 +1409,8 @@ export default function Index() {
           </div>
         </div>
 
-        {/* SECTION 7: THE MINDS BEHIND COVARIENT */}
-        <div
-          id="minds"
-          className="relative px-6 lg:px-16 py-32 bg-[#080808] border-b border-white/5 overflow-hidden"
-        >
-          {/* Faint ambient glow behind the section */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-lime/5 blur-[120px] rounded-full pointer-events-none" />
 
-          <div className="relative max-w-7xl mx-auto">
-            {/* Section Header for Mobile (Hidden on Desktop) */}
-            <div className="lg:hidden mb-16 text-center">
-              <p className="text-lime text-xs tracking-[0.25em] uppercase mb-4 font-mono">
-                THE MINDS BEHIND COVARIENT
-              </p>
-              <h2 className="text-white text-4xl font-bold leading-tight font-space mb-4">
-                Two Minds.<br />One Digital Standard.
-              </h2>
-              <p className="text-customMuted text-sm font-sans leading-relaxed max-w-md mx-auto">
-                Veer builds the system. Nyra shapes the experience. Together, they represent how Covarient creates modern websites for serious brands.
-              </p>
-            </div>
 
-            {/* Main Interactive Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-
-              {/* Left Column: VEER Card */}
-              <div className="lg:col-span-4 flex flex-col items-center lg:items-end">
-                <div className="w-full max-w-[360px] bg-card border border-white/5 hover:border-lime/30 rounded-2xl overflow-hidden p-6 transition-all duration-500 hover:scale-[1.02] shadow-[0_0_30px_rgba(0,0,0,0.5)] group relative">
-                  {/* Glowing border effect */}
-                  <div className="absolute inset-0 border border-lime/0 group-hover:border-lime/20 rounded-2xl transition-colors duration-500" />
-
-                  {/* Portrait Image Container */}
-                  <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-6 bg-black border border-white/10">
-                    <Image
-                      source={require('../assets/images/veer.png')}
-                      style={{ width: '100%', height: '100%', borderRadius: 12 }}
-                      resizeMode="cover"
-                      className=" group-hover:grayscale-0 transition-all duration-700 ease-out scale-100 group-hover:scale-105"
-                    />
-                    {/* Corner accents */}
-                    <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-lime/65 opacity-60" />
-                    <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-lime/65 opacity-60" />
-                  </div>
-
-                  {/* Character Info */}
-                  <div className="text-center">
-                    <h3 className="text-lime text-2xl lg:text-3xl font-space font-bold tracking-wide uppercase mb-1">
-                      VEER
-                    </h3>
-                    <p className="text-white/60 text-xs font-mono tracking-widest uppercase mb-5">
-                      THE SYSTEM ARCHITECT
-                    </p>
-
-                    {/* Strengths Pills */}
-                    <div className="flex flex-row items-center justify-center gap-2 mb-6">
-                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">STRATEGY</span>
-                      <span className="text-white/20 text-xs font-mono">|</span>
-                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">DEVELOPMENT</span>
-                      <span className="text-white/20 text-xs font-mono">|</span>
-                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">EXECUTION</span>
-                    </div>
-
-                    <p className="text-customMuted text-sm leading-relaxed font-sans min-h-[72px]">
-                      Veer represents the logic behind every Covarient project — structure, speed, performance, and scalable systems.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Center Column: Desktop Header and Connections (Hidden on Mobile) */}
-              <div className="hidden lg:col-span-4 lg:flex flex-col items-center justify-center text-center px-4 relative">
-                {/* Horizontal connection lines and middle monogram */}
-                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-between pointer-events-none px-4 z-0">
-                  <div className="h-[1px] flex-1 bg-gradient-to-r from-lime/20 to-lime/40" />
-                  <div className="w-10 h-10 rounded-full bg-black border border-lime/30 flex items-center justify-center shadow-[0_0_15px_rgba(142,224,0,0.2)] mx-4">
-                    {/* Small monogram icon */}
-                    <span className="text-lime font-space font-bold text-sm">C</span>
-                  </div>
-                  <div className="h-[1px] flex-1 bg-gradient-to-r from-lime/40 to-lime/20" />
-                </div>
-
-                <div className="z-10 bg-[#080808]/90 py-8 px-4 rounded-xl border border-white/5 backdrop-blur-sm">
-                  <p className="text-lime text-xs tracking-[0.25em] uppercase mb-4 font-mono">
-                    THE MINDS BEHIND COVARIENT
-                  </p>
-                  <h2 className="text-white text-5xl font-bold leading-tight font-space mb-6 tracking-tight">
-                    Two Minds.<br />One Digital Standard.
-                  </h2>
-                  <p className="text-customMuted text-[14px] leading-relaxed font-sans max-w-xs mx-auto">
-                    Veer builds the system. Nyra shapes the experience. Together, they represent how Covarient creates modern websites for serious brands.
-                  </p>
-                </div>
-              </div>
-
-              {/* Right Column: NYRA Card */}
-              <div className="lg:col-span-4 flex flex-col items-center lg:items-start">
-                <div className="w-full max-w-[360px] bg-card border border-white/5 hover:border-lime/30 rounded-2xl overflow-hidden p-6 transition-all duration-500 hover:scale-[1.02] shadow-[0_0_30px_rgba(0,0,0,0.5)] group relative">
-                  {/* Glowing border effect */}
-                  <div className="absolute inset-0 border border-lime/0 group-hover:border-lime/20 rounded-2xl transition-colors duration-500" />
-
-                  {/* Portrait Image Container */}
-                  <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-6 bg-black border border-white/10">
-                    <Image
-                      source={require('../assets/images/nyra.png')}
-                      style={{ width: '100%', height: '100%', borderRadius: 12 }}
-                      resizeMode="cover"
-                      className="group-hover:grayscale-0 transition-all duration-700 ease-out scale-100 group-hover:scale-105"
-                    />
-                    {/* Corner accents */}
-                    <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-lime/65 opacity-60" />
-                    <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-lime/65 opacity-60" />
-                  </div>
-
-                  {/* Character Info */}
-                  <div className="text-center">
-                    <h3 className="text-lime text-2xl lg:text-3xl font-space font-bold tracking-wide uppercase mb-1">
-                      NYRA
-                    </h3>
-                    <p className="text-white/60 text-xs font-mono tracking-widest uppercase mb-5">
-                      THE BRAND INTELLIGENCE
-                    </p>
-
-                    {/* Strengths Pills */}
-                    <div className="flex flex-row items-center justify-center gap-2 mb-6">
-                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">DESIGN</span>
-                      <span className="text-white/20 text-xs font-mono">|</span>
-                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">STORYTELLING</span>
-                      <span className="text-white/20 text-xs font-mono">|</span>
-                      <span className="text-[10px] font-mono tracking-wider text-lime bg-lime/10 border border-lime/20 px-2 py-1 rounded-sm">EXPERIENCE</span>
-                    </div>
-
-                    <p className="text-customMuted text-sm leading-relaxed font-sans min-h-[72px]">
-                      Nyra represents the emotional side of every project — trust, identity, visual clarity, and user experience.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Disclaimer */}
-            <div className="mt-16 text-center border-t border-white/5 pt-8">
-              <p className="text-[10px] font-mono tracking-widest text-customMuted/60 uppercase">
-                * Disclaimer: Veer and Nyra are brand characters representing the core pillars of Covarient, not real human beings.
-              </p>
-            </div>
-          </div>
-        </div>
 
         {/* SECTION 8: PROCESS */}
         <div id="process" className="px-6 lg:px-16 py-32 bg-[#0D0D0D] border-b border-white/5 relative overflow-visible">
@@ -1472,6 +1527,8 @@ export default function Index() {
             </div>
 
           </div>
+
+
         </div>
 
         {/* SECTION 9: TECH STACK (Typography Wall) */}
@@ -1546,6 +1603,8 @@ export default function Index() {
             </div>
 
           </div>
+
+
         </div>
 
         {/* SECTION 10: CLIENT STORIES (Screenshot / Chat Wall) */}
@@ -1558,10 +1617,10 @@ export default function Index() {
                 CLIENT STORIES
               </p>
               <h2 className="text-white text-5xl lg:text-6xl font-bold leading-tight font-space mb-6">
-                Real Slack, WhatsApp & Mail Snaps.
+                Concept Snaps & Channel Logs
               </h2>
               <p className="text-zinc-400 font-sans text-base leading-relaxed">
-                We don't do boring text reviews. Here is actual feedback from our project channels demonstrating how we deliver real outcomes.
+                Here is a showcase of concept transformations and simulated channel logs representing our typical project delivery standard.
               </p>
             </div>
 
@@ -1575,7 +1634,7 @@ export default function Index() {
                     <span className="w-3 h-3 rounded-full bg-[#E01E5A]" />
                     <span className="text-white/60 font-mono text-xs uppercase tracking-wider font-semibold">#product-telemetry</span>
                   </div>
-                  <span className="text-white/30 font-mono text-[10px]">slack-channel</span>
+                  <span className="text-white/30 font-mono text-[10px]">concept study</span>
                 </div>
 
                 <div className="flex flex-row items-start gap-3 mb-4">
@@ -1613,7 +1672,7 @@ export default function Index() {
                     <span className="w-3.5 h-3.5 rounded-full bg-[#25D366] items-center justify-center flex text-[8px] text-white">✓</span>
                     <span className="text-white/60 font-space text-xs uppercase tracking-wider font-semibold">Sarah Collins (StyleHive)</span>
                   </div>
-                  <span className="text-[#25d366] font-mono text-[10px] uppercase tracking-wider">online</span>
+                  <span className="text-[#25d366] font-mono text-[10px] uppercase tracking-wider">sample study</span>
                 </div>
 
                 <div className="flex flex-col gap-3 font-sans text-[13px]">
@@ -1647,7 +1706,7 @@ export default function Index() {
                     </svg>
                     <span className="text-white/60 font-mono text-xs uppercase tracking-wider font-semibold">LinkedIn Recommendation</span>
                   </div>
-                  <span className="text-white/30 font-mono text-[10px]">verified</span>
+                  <span className="text-white/30 font-mono text-[10px]">concept transform</span>
                 </div>
 
                 <div className="flex flex-row items-center gap-3 mb-4">
@@ -1677,7 +1736,7 @@ export default function Index() {
                     <span className="w-3 h-3 rounded-full bg-[#EA4335]" />
                     <span className="text-white/60 font-mono text-xs uppercase tracking-wider font-semibold">telemedicine release</span>
                   </div>
-                  <span className="text-white/30 font-mono text-[10px]">gmail-snippet</span>
+                  <span className="text-white/30 font-mono text-[10px]">sample study</span>
                 </div>
 
                 <div className="flex flex-col gap-2 font-sans text-sm">
@@ -1701,6 +1760,249 @@ export default function Index() {
                 </div>
               </div>
             </div>
+
+
+          </div>
+        </div>
+
+        {/* NEW SECTION: PRICING (CHOOSE YOUR GROWTH STAGE) */}
+        <div id="pricing" className="px-6 lg:px-16 py-32 bg-[#050505] border-t border-white/5 relative overflow-hidden">
+          <div className="absolute inset-0 bg-radial-glow opacity-20 pointer-events-none" style={{
+            background: 'radial-gradient(circle at top, #0f1a00 0%, #000000 60%)'
+          }} />
+
+          <div className="max-w-7xl mx-auto relative z-10">
+            {/* Header */}
+            <div className="text-center mb-20 max-w-3xl mx-auto">
+              <p className="text-[#8EE000] text-xs tracking-[0.25em] uppercase mb-4 font-mono font-semibold">
+                PRICING PLANS
+              </p>
+              <h2 className="text-white font-space font-bold text-4xl md:text-5xl lg:text-6xl leading-tight uppercase mb-6">
+                CHOOSE YOUR GROWTH STAGE
+              </h2>
+              <p className="text-zinc-400 font-sans text-base lg:text-lg leading-relaxed">
+                Different businesses need different systems. We build websites that match where your brand is today—and where it's going next.
+              </p>
+            </div>
+
+            {/* Pricing Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch mb-20">
+
+              {/* TIER 01: STARTER */}
+              <div className="bg-[#0A0A0A] border border-white/5 p-8 rounded-2xl flex flex-col justify-between transition-all duration-300 hover:border-white/20">
+                <div>
+                  <div className="flex justify-between items-center mb-6">
+                    <span className="text-[#8EE000] font-mono text-xs uppercase tracking-widest">TIER 01</span>
+                    <span className="text-white/40 font-mono text-xs">Standard Grade</span>
+                  </div>
+                  <h3 className="text-white font-space font-bold text-3xl mb-2 uppercase">STARTER WEBSITE</h3>
+                  <p className="text-zinc-400 font-sans text-sm mb-8 leading-relaxed">
+                    For businesses that need a professional online presence.
+                  </p>
+
+                  <div className="h-[1px] bg-white/5 my-6" />
+
+                  <h4 className="text-white font-space font-bold text-xs uppercase tracking-widest mb-4">INCLUDES</h4>
+                  <ul className="flex flex-col gap-3 mb-8">
+                    {[
+                      'Premium custom design',
+                      'Mobile responsive',
+                      'Fast loading pages',
+                      'Contact form integration',
+                      'Basic SEO setup',
+                      '5–7 pages',
+                      'Launch support'
+                    ].map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5">
+                        <span className="text-[#8EE000] text-sm mt-0.5">✓</span>
+                        <span className="text-zinc-300 font-sans text-sm leading-relaxed">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="h-[1px] bg-white/5 my-6" />
+
+                  <h4 className="text-white font-space font-bold text-xs uppercase tracking-widest mb-3">BEST FOR</h4>
+                  <ul className="flex flex-col gap-2 mb-8">
+                    {['Local businesses', 'Personal brands', 'New startups', 'Service providers'].map((item, idx) => (
+                      <li key={idx} className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white/30" />
+                        <span className="text-zinc-400 font-sans text-xs">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <div className="bg-white/5 p-4 rounded-lg mb-6">
+                    <p className="text-white/40 font-mono text-[10px] uppercase tracking-widest mb-1">RESULT</p>
+                    <p className="text-white font-sans text-sm font-semibold leading-relaxed">
+                      Look credible. Build trust. Start converting visitors into leads.
+                    </p>
+                  </div>
+                  <Pressable
+                    onPress={() => handleScrollToSection('contact')}
+                    className="w-full bg-transparent border border-white/20 hover:border-[#8EE000] hover:bg-[#8EE000]/5 py-4 rounded-xl items-center justify-center flex transition-all duration-300 clickable"
+                  >
+                    <Text className="text-white font-space font-bold text-xs uppercase tracking-wider">
+                      Enquire for Specs
+                    </Text>
+                  </Pressable>
+                </div>
+              </div>
+
+              {/* TIER 02: GROWTH (Featured Card with Glow and Shadow) */}
+              <div className="bg-[#0A0A0A] border-2 border-[#8EE000] p-8 rounded-2xl flex flex-col justify-between transition-all duration-300 relative shadow-[0_0_30px_rgba(142,224,0,0.15)] scale-100 lg:scale-[1.03]">
+                {/* Popular Badge */}
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#8EE000] px-4 py-1 rounded-full">
+                  <span className="text-black font-space font-bold text-[10px] uppercase tracking-widest">MOST POPULAR</span>
+                </div>
+
+                <div>
+                  <div className="flex justify-between items-center mb-6 mt-2">
+                    <span className="text-[#8EE000] font-mono text-xs uppercase tracking-widest">TIER 02</span>
+                    <span className="text-[#8EE000] font-mono text-xs uppercase tracking-widest font-bold">Popular Choice</span>
+                  </div>
+                  <h3 className="text-white font-space font-bold text-3xl mb-2 uppercase">GROWTH WEBSITE</h3>
+                  <p className="text-zinc-300 font-sans text-sm mb-8 leading-relaxed">
+                    For growing brands that want to dominate search and convert visitors at a high rate.
+                  </p>
+
+                  <div className="h-[1px] bg-white/5 my-6" />
+
+                  <h4 className="text-white font-space font-bold text-xs uppercase tracking-widest mb-4">INCLUDES</h4>
+                  <ul className="flex flex-col gap-3 mb-8">
+                    {[
+                      'Everything in STARTER +',
+                      'Advanced speed optimization',
+                      'Custom copy-writing & branding integration',
+                      'Custom CMS / Blog integration',
+                      'Automated leads CRM integration',
+                      'Premium SEO package (Keywords + On-page)',
+                      '10–12 pages',
+                      '30-day post-launch support'
+                    ].map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5">
+                        <span className="text-[#8EE000] text-sm mt-0.5">✓</span>
+                        <span className="text-zinc-100 font-sans text-sm leading-relaxed">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="h-[1px] bg-white/5 my-6" />
+
+                  <h4 className="text-white font-space font-bold text-xs uppercase tracking-widest mb-3">BEST FOR</h4>
+                  <ul className="flex flex-col gap-2 mb-8">
+                    {['E-commerce brands', 'Growing agencies & consulting firms', 'B2B service companies', 'Funded startups'].map((item, idx) => (
+                      <li key={idx} className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#8EE000]/60" />
+                        <span className="text-zinc-300 font-sans text-xs">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <div className="bg-[#8EE000]/10 border border-[#8EE000]/20 p-4 rounded-lg mb-6">
+                    <p className="text-[#8EE000] font-mono text-[10px] uppercase tracking-widest mb-1">RESULT</p>
+                    <p className="text-white font-sans text-sm font-semibold leading-relaxed">
+                      Own your niche. Drive traffic. Standardize your client onboarding and sales.
+                    </p>
+                  </div>
+                  <Pressable
+                    onPress={() => handleScrollToSection('contact')}
+                    className="w-full bg-[#8EE000] hover:bg-[#9ef01a] py-4 rounded-xl items-center justify-center flex transition-all duration-300 clickable"
+                  >
+                    <Text className="text-black font-space font-bold text-xs uppercase tracking-wider">
+                      Start Your Growth Stage
+                    </Text>
+                  </Pressable>
+                </div>
+              </div>
+
+              {/* TIER 03: PREMIUM */}
+              <div className="bg-[#0A0A0A] border border-white/5 p-8 rounded-2xl flex flex-col justify-between transition-all duration-300 hover:border-white/20">
+                <div>
+                  <div className="flex justify-between items-center mb-6">
+                    <span className="text-[#8EE000] font-mono text-xs uppercase tracking-widest">TIER 03</span>
+                    <span className="text-white/40 font-mono text-xs">Enterprise Grade</span>
+                  </div>
+                  <h3 className="text-white font-space font-bold text-3xl mb-2 uppercase">PREMIUM SYSTEM</h3>
+                  <p className="text-zinc-400 font-sans text-sm mb-8 leading-relaxed">
+                    For established businesses that need a bespoke digital system to support complex operations.
+                  </p>
+
+                  <div className="h-[1px] bg-white/5 my-6" />
+
+                  <h4 className="text-white font-space font-bold text-xs uppercase tracking-widest mb-4">INCLUDES</h4>
+                  <ul className="flex flex-col gap-3 mb-8">
+                    {[
+                      'Everything in GROWTH +',
+                      'Custom backend integrations',
+                      'Web applications / Dashboards',
+                      'Multi-language & Localization',
+                      'Database design & custom APIs',
+                      'Advanced analytics dashboards',
+                      'Priority support & retainer options',
+                      'Full-scale brand identity design'
+                    ].map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5">
+                        <span className="text-[#8EE000] text-sm mt-0.5">✓</span>
+                        <span className="text-zinc-300 font-sans text-sm leading-relaxed">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="h-[1px] bg-white/5 my-6" />
+
+                  <h4 className="text-white font-space font-bold text-xs uppercase tracking-widest mb-3">BEST FOR</h4>
+                  <ul className="flex flex-col gap-2 mb-8">
+                    {['Enterprise corporations', 'Multi-location businesses', 'SaaS / Tech platforms', 'Brands requiring custom software'].map((item, idx) => (
+                      <li key={idx} className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white/30" />
+                        <span className="text-zinc-400 font-sans text-xs">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <div className="bg-white/5 p-4 rounded-lg mb-6">
+                    <p className="text-white/40 font-mono text-[10px] uppercase tracking-widest mb-1">RESULT</p>
+                    <p className="text-white font-sans text-sm font-semibold leading-relaxed">
+                      Automate your operations. Scale without limits. Deliver a world-class customer experience.
+                    </p>
+                  </div>
+                  <Pressable
+                    onPress={() => handleScrollToSection('contact')}
+                    className="w-full bg-transparent border border-white/20 hover:border-[#8EE000] hover:bg-[#8EE000]/5 py-4 rounded-xl items-center justify-center flex transition-all duration-300 clickable"
+                  >
+                    <Text className="text-white font-space font-bold text-xs uppercase tracking-wider">
+                      Request Consultation
+                    </Text>
+                  </Pressable>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Bottom Strategy Call CTA block */}
+            <div className="flex flex-col sm:flex-row items-center justify-between p-8 bg-[#0A0A0A] border border-lime/20 rounded-xl gap-6">
+              <div className="flex-1">
+                <span className="text-[#8EE000] font-mono text-[10px] tracking-widest uppercase mb-1.5 block font-bold">NOT SURE WHICH PLAN FITS?</span>
+                <h4 className="text-white font-space font-bold text-xl mb-1.5">Book a free strategy call.</h4>
+                <p className="text-zinc-400 font-sans text-sm leading-relaxed max-w-2xl">We'll identify exactly what your business needs before recommending a solution.</p>
+              </div>
+              <Pressable
+                onPress={() => handleScrollToSection('contact')}
+                className="bg-lime px-8 py-4 rounded-lg hover:scale-[1.02] active:scale-[0.98] transition-transform duration-200 clickable"
+              >
+                <Text className="text-black font-space font-bold uppercase text-xs tracking-wider">
+                  Start Your Project
+                </Text>
+              </Pressable>
+            </div>
+
           </div>
         </div>
 
@@ -1720,9 +2022,13 @@ export default function Index() {
                 <br />
                 your next <span className="text-[#8EE000]">big idea?</span>
               </h2>
-              <p className="text-zinc-400 font-sans text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed">
+              <p className="text-zinc-400 font-sans text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-6">
                 Let's turn your concept into a production-grade software product.
               </p>
+              <div className="inline-flex items-center gap-2 bg-[#8EE000]/10 border border-[#8EE000]/20 px-4 py-1.5 rounded-full mx-auto">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#8EE000] animate-pulse" />
+                <span className="text-[#8EE000] font-mono text-[10px] uppercase tracking-widest font-bold">Limited project slots each month</span>
+              </div>
             </div>
 
             {/* Content Container (No card background, clean input underlines, lots of whitespace) */}
@@ -1881,19 +2187,19 @@ export default function Index() {
 
                 {/* Social Links with hover state */}
                 <View className="flex-row gap-6">
-                  <Pressable onPress={() => Linking.openURL('#')} className="clickable group flex-row items-center gap-1">
+                  <Pressable onPress={() => Linking.openURL('https://linkedin.com/company/covarient')} className="clickable group flex-row items-center gap-1">
                     <Linkedin color="#888888" size={18} />
                     <span className="text-xs font-mono text-white/40 group-hover:text-[#8EE000] transition-colors duration-300">LI</span>
                   </Pressable>
-                  <Pressable onPress={() => Linking.openURL('#')} className="clickable group flex-row items-center gap-1">
+                  <Pressable onPress={() => Linking.openURL('https://instagram.com/covarient')} className="clickable group flex-row items-center gap-1">
                     <Instagram color="#888888" size={18} />
                     <span className="text-xs font-mono text-white/40 group-hover:text-[#8EE000] transition-colors duration-300">IG</span>
                   </Pressable>
-                  <Pressable onPress={() => Linking.openURL('#')} className="clickable group flex-row items-center gap-1">
+                  <Pressable onPress={() => Linking.openURL('https://x.com/covarient')} className="clickable group flex-row items-center gap-1">
                     <Twitter color="#888888" size={18} />
                     <span className="text-xs font-mono text-white/40 group-hover:text-[#8EE000] transition-colors duration-300">TW</span>
                   </Pressable>
-                  <Pressable onPress={() => Linking.openURL('#')} className="clickable group flex-row items-center gap-1">
+                  <Pressable onPress={() => Linking.openURL('https://github.com/covarient')} className="clickable group flex-row items-center gap-1">
                     <Github color="#888888" size={18} />
                     <span className="text-xs font-mono text-white/40 group-hover:text-[#8EE000] transition-colors duration-300">GH</span>
                   </Pressable>
@@ -1955,6 +2261,6 @@ export default function Index() {
           </View>
         </View>
       </div>
-    </div >
+    </div>
   );
 }
