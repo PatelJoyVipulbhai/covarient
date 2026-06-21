@@ -893,7 +893,7 @@ export default function Index() {
 
         {/* Desktop nav links */}
         <View className="hidden lg:flex flex-row items-center gap-8">
-          {['Home', 'Why Us', 'About', 'Services', 'Process', 'Technology', 'Pricing', 'Review', 'Contact'].map((section) => (
+          {['Home', 'Why Us', 'About', 'Services', 'Process', 'Technology', 'Review', 'Pricing', 'Contact'].map((section) => (
             <Pressable
               key={section}
               onPress={() => handleScrollToSection(section.toLowerCase())}
@@ -935,7 +935,7 @@ export default function Index() {
       {mobileMenuOpen && (
         <View className="fixed inset-0 bg-black z-[998] pt-24 px-8 justify-start">
           <View className="flex-col gap-6 items-start">
-            {['Home', 'About', 'Why Us', 'Services', 'Process', 'Technology', 'Pricing', 'Review', 'Contact'].map((section) => (
+            {['Home', 'Why Us', 'About', 'Services', 'Process', 'Technology', 'Review', 'Pricing', 'Contact'].map((section) => (
               <Pressable
                 key={section}
                 onPress={() => handleScrollToSection(section.toLowerCase())}
